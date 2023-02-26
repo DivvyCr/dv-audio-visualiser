@@ -21,17 +21,27 @@ void setup()
   player.play(0);
 }
 
+float[] samples;
+float[] prevSamples;
+
 void draw()
 {
-  fill(0, 0, 0, 64);
+  fill(0, 0, 0, 50);
   rect(0, 0, width, height);
   
-  float[] samples = player.mix.toArray();
-  for(int i = 0; i < samples.length - 1; i++)
-  {
+  samples = player.mix.toArray();
+
+  for(int i = 0; i < samples.length - 1; i++) {
     float y1 = map(i  , 0, samples.length, 0, height);
     float y2 = map(i+1, 0, samples.length, 0, height);
-    stroke(255, 152, 26);
-    line(width/2 + samples[i]*50, y2, width/2 + samples[i+1]*50, y1);
+    float diff = 0;
+    if (prevSamples != null) {
+      diff = ((samples[i] - prevSamples[i]) / 2) * 1.5; // the division is to bring diff to [0,1] range; the multiplier is to emphasise
+    }
+    stroke(255, 152 - 152*abs(diff), 26);
+    
+    line(width/2 + samples[i]*50 + 25*diff, y2, width/2 + samples[i+1]*50 + 25*diff, y1);
   }
+
+  prevSamples = samples;
 }
