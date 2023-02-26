@@ -17,7 +17,7 @@ void setup()
   size(360, 720, P3D);
   
   minim = new Minim(this);
-  player = minim.loadFile("../track3.mp3");
+  player = minim.loadFile("../track.mp3");
   player.play(0);
 }
 
@@ -38,6 +38,7 @@ void draw()
     if (prevSamples != null) {
       diff = (samples[i] - prevSamples[i]) / 2; // bring diff to [0,1] range
       diff = pow(diff * 1.25, 3); // emphasise
+      // TODO: switch to relative diff, instead of absolute?
     }
     stroke(255, 150 + 105*abs(diff), 25 + 220*abs(diff));
     
