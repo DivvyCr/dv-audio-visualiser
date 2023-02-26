@@ -7,7 +7,7 @@ FFT fft;
 
 void setup()
 {
-  size(512, 512);
+  size(1024, 512);
   
   minim = new Minim(this);
   player = minim.loadFile("../track2.mp3"); 
@@ -28,16 +28,25 @@ void draw()
  
   values = new float[fft.specSize()];
   for(int i = 0; i < fft.specSize(); i++) {
+    int j = fft.specSize()-i;
     stroke(255);
     values[i] = fft.getBand(i)*3;
     if (prevValues == null) {
       prevValues = new float[fft.specSize()];
     }
+    
+    stroke(255);
     if (prevValues[i] > values[i]) {
-      line(i, height, i, height - prevValues[i]);
+      line(width/2, j, width/2 - prevValues[i], j);
+      line(width/2, j, width/2 + prevValues[i], j);
       prevValues[i] = prevValues[i] * 0.9;
     } else {
-      line(i, height, i, height - values[i]);
+      //if ((values[i] - prevValues[i]) / prevValues[i] > 0.8) {
+      //  stroke(255, 150, 25);
+      //}
+      stroke(255, 150, 25);
+      line(width/2, j, width/2 - values[i], j);
+      line(width/2, j, width/2 + values[i], j);
       prevValues[i] = values[i];
     }
   }
