@@ -17,7 +17,7 @@ void setup()
   size(360, 720, P3D);
   
   minim = new Minim(this);
-  player = minim.loadFile("../track2.mp3");
+  player = minim.loadFile("../track3.mp3");
   player.play(0);
 }
 
@@ -36,9 +36,10 @@ void draw()
     float y2 = map(i+1, 0, samples.length, 0, height);
     float diff = 0;
     if (prevSamples != null) {
-      diff = ((samples[i] - prevSamples[i]) / 2) * 1.5; // the division is to bring diff to [0,1] range; the multiplier is to emphasise
+      diff = (samples[i] - prevSamples[i]) / 2; // bring diff to [0,1] range
+      diff = pow(diff * 1.25, 3); // emphasise
     }
-    stroke(255, 152 - 152*abs(diff), 26);
+    stroke(255, 150 + 105*abs(diff), 25 + 220*abs(diff));
     
     line(width/2 + samples[i]*50 + 25*diff, y2, width/2 + samples[i+1]*50 + 25*diff, y1);
   }
