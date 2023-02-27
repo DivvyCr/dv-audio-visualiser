@@ -25,14 +25,14 @@ void setup()
 
   analyzeUsingAudioRecordingStream();
   
-  track = minim.loadFile("../track3.mp3");
+  track = minim.loadFile("../track.mp3");
   track.play(0);
 }
 
 void analyzeUsingAudioRecordingStream()
 {
   int fftSize = 1024;
-  AudioRecordingStream stream = minim.loadFileStream("../track3.mp3", fftSize, false);
+  AudioRecordingStream stream = minim.loadFileStream("../track.mp3", fftSize, false);
   
   // tell it to "play" so we can read from it.
   stream.play();

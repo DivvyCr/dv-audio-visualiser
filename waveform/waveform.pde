@@ -25,9 +25,11 @@ void setup()
 float[] samples;
 float[] prevSamples;
 
+float min = 0;
+
 void draw()
 {
-  fill(0, 0, 0, 50);
+  fill(0, 0, 0, 64);
   rect(0, 0, width, height);
   
   samples = player.mix.toArray();
@@ -36,14 +38,19 @@ void draw()
     float y1 = map(i  , 0, samples.length, 0, height);
     float y2 = map(i+1, 0, samples.length, 0, height);
     float diff = 0;
-    if (prevSamples != null) {
-      diff = (samples[i] - prevSamples[i]) / 2; // bring diff to [0,1] range
-      diff = pow(diff * 1.25, 3); // emphasise
-      // TODO: switch to relative diff, instead of absolute?
-    }
-    stroke(255, 150 + 105*abs(diff), 25 + 220*abs(diff));
     
-    line(width/2 + samples[i]*50 + 25*diff, y2, width/2 + samples[i+1]*50 + 25*diff, y1);
+    if (prevSamples != null) {
+      // diff = (samples[i] - prevSamples[i]) / 2; // bring diff to [-1,1] range
+      // diff = pow(diff * 1.25, 3); // emphasise
+      
+      diff = (samples[i] == 0 || prevSamples[i+1] == 0) ? 0 : log(samples[i] / samples[i+1]);
+      diff = constrain(diff, -10, 10);
+    }
+    
+    strokeWeight(1.5);
+    if (abs(diff) >= 1) stroke(255);
+    else stroke(255, 150, 25);
+    line(width/2 + samples[i]*50, y2, width/2 + samples[i+1]*50, y1);
   }
 
   prevSamples = samples;

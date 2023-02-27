@@ -7,10 +7,10 @@ FFT fft;
 
 void setup()
 {
-  size(1024, 1024);
+  size(512, 1024, P3D);
   
   minim = new Minim(this);
-  player = minim.loadFile("../track3.mp3"); 
+  player = minim.loadFile("../track4.mp3"); 
   fft = new FFT(player.bufferSize(), player.sampleRate());
   fft.linAverages(fft.specSize()/3); // TODO: Use log, but don't account for band widths (ie. just use lines)
   
