@@ -13,20 +13,20 @@ import ddf.minim.analysis.*;
 import ddf.minim.spi.*;
 
 Minim minim;
-AudioPlayer groove;
+AudioPlayer track;
 float[] avgSamplesLeft;
 float[] avgSamplesRight;
 
 void setup()
 {
-  size(512, 400, P3D);
+  size(1024, 512, P3D);
 
   minim = new Minim(this);
 
   analyzeUsingAudioRecordingStream();
   
-  groove = minim.loadFile("../track3.mp3");
-  groove.play(0);
+  track = minim.loadFile("../track3.mp3");
+  track.play(0);
 }
 
 void analyzeUsingAudioRecordingStream()
@@ -69,15 +69,25 @@ void draw()
 { 
   background(0);
 
-  float pos = map(groove.position(), 0, groove.length(), 0, avgSamplesLeft.length);
+  float pos = map(track.position(), 0, track.length(), 0, avgSamplesLeft.length);
   
   for (int i = max(0, int(pos)-100); i < avgSamplesLeft.length && i < int(pos)+100; i++) {
-    float x = map(i  , int(pos)-100, int(pos)+100, width/2 - 300, width/2 + 300);
-    stroke(255);
-    if (int(x) == width/2) {
-      stroke(255, 150, 25);
+    float x = map(i, int(pos)-100, int(pos)+100, 0, width);
+    
+    float temp = x >= width/2 ? 1 : -1;
+    temp *= pow(0.5 * abs(i - int(pos)), 1.6);
+    
+    float deviate = map(abs(width/2 - x), 100, width/2, 0, 2);
+    temp += random(-deviate, deviate);
+    
+    if (x >= width/2 - 10 && x <= width/2 + 10) {
+      stroke(255, 150, 25, 255);
+    } else {
+      float opacity = map(abs(width/2 - x), 50, width/2, 0, 255);
+      stroke(255, opacity);
     }
-    line(x, height/2, x, height/2 - avgSamplesLeft[i]*100);
-    line(x, height/2, x, height/2 + avgSamplesRight[i]*100);
+    strokeWeight(2);
+    line(width/2 + temp, height/2, width/2 + temp, height/2 - avgSamplesLeft[i]*200);
+    line(width/2 + temp, height/2, width/2 + temp, height/2 + avgSamplesRight[i]*200);
   }
 }

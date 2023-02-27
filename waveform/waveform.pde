@@ -17,7 +17,8 @@ void setup()
   size(360, 720, P3D);
   
   minim = new Minim(this);
-  player = minim.loadFile("../track.mp3");
+  player = minim.loadFile("../track3.mp3");
+  print(player.sampleRate());
   player.play(0);
 }
 
